@@ -11,6 +11,9 @@ const VP_DIR = path.join(DOCS, '.vitepress')
 
 const posix = path.posix
 
+/** 站点 base，直接从 docs/.vitepress/config.mts 里读，避免两处不一致 */
+const BASE = (fs.readFileSync(path.join(VP_DIR, 'config.mts'), 'utf8').match(/const base = '([^']*)'/) || [, '/'])[1]
+
 /** 和 docs/.vitepress/config.mts 里的 markdown 配置保持一致 */
 const md = await createMarkdownRenderer(
   DOCS,
@@ -941,6 +944,38 @@ function addTableBody(content) {
   })
 }
 
+/**
+ * 给原始 HTML 里的绝对路径补上站点 base。
+ *
+ * VitePress 只会给 markdown 语法写的链接套 base（`[x](/foo)`、配置里的 sidebar 等），
+ * 正文里手写的 `<a href="/foo">`、`<img src="/foo.png">` 会原样输出，
+ * 部署到 https://<user>.github.io/<repo>/ 这类子路径时就会 404。
+ */
+function applyBase(content) {
+  if (BASE === '/') return content
+  const out = []
+  let fence = false
+  for (const line of content.split('\n')) {
+    if (/^\s*(```|~~~)/.test(line)) {
+      fence = !fence
+      out.push(line)
+      continue
+    }
+    if (fence) {
+      out.push(line)
+      continue
+    }
+    out.push(
+      splitInlineCode(line)
+        .map((part) =>
+          part.code ? part.text : part.text.replace(/(href|src)=(["'])\/(?!\/)/g, (m, attr, quote) => `${attr}=${quote}${BASE}`),
+        )
+        .join(''),
+    )
+  }
+  return out.join('\n')
+}
+
 function escapeInterpolation(content) {
   const out = []
   let fence = false
@@ -975,6 +1010,7 @@ for (const page of pages) {
   page.content = normalizeQnA(page.content)
   page.content = sanitizeHtml(page.content)
   page.content = addTableBody(page.content)
+  page.content = applyBase(page.content)
   page.content = escapeInterpolation(page.content)
   page.content = page.content.replace(/<a\s+name="([^"]+)"><\/a>/g, '<a id="$1"></a>')
   page.content = page.content.replace(/<a\s+name="([^"]+)"\s*\/>/g, '<a id="$1"></a>')
@@ -1112,9 +1148,8 @@ for (const group of topicCards) {
 // 总览页用和首页一样的专题卡片（占位符在这里才拿得到卡片 HTML，所以补写一次）
 const guideIndexPage = pages.find((p) => p.relOut === 'guide/index.md')
 if (guideIndexPage && guideIndexPage.content.includes('@@TOPIC_CARDS@@')) {
-  guideIndexPage.content = guideIndexPage.content.replace(
-    '@@TOPIC_CARDS@@',
-    `<div class="topic-sections">\n${cardsHtml}</div>`,
+  guideIndexPage.content = applyBase(
+    guideIndexPage.content.replace('@@TOPIC_CARDS@@', `<div class="topic-sections">\n${cardsHtml}</div>`),
   )
   fs.writeFileSync(
     path.join(DOCS, 'guide/index.md'),
@@ -1173,14 +1208,18 @@ ${guideLinks}
 - 本站仅用于学习交流，遵循上游 **CC BY-NC-ND 3.0** 许可，详见[阅读说明](/about)。
 `
 
-fs.writeFileSync(path.join(DOCS, 'index.md'), homeContent, 'utf8')
+fs.writeFileSync(path.join(DOCS, 'index.md'), applyBase(homeContent), 'utf8')
 
 /* ------------------------------------------------------------------ */
 /* 阅读说明 / 关于                                                     */
 /* ------------------------------------------------------------------ */
 
 const aboutTemplate = fs.readFileSync(path.join(ROOT, 'templates', 'about.md'), 'utf8')
-fs.writeFileSync(path.join(DOCS, 'about.md'), aboutTemplate.replaceAll('{{TOTAL_QUESTIONS}}', String(totalQuestions)), 'utf8')
+fs.writeFileSync(
+  path.join(DOCS, 'about.md'),
+  applyBase(aboutTemplate.replaceAll('{{TOTAL_QUESTIONS}}', String(totalQuestions))),
+  'utf8',
+)
 
 /* ------------------------------------------------------------------ */
 /* 报告                                                                */

@@ -4,7 +4,7 @@ import sidebar from './sidebar.json'
 
 // 如果部署到 GitHub Pages 的子路径（https://<user>.github.io/<repo>/），
 // 把 base 改成 '/<repo>/'，并把 generate.mjs 里的站内链接改成相对路径。
-const base = '/'
+const base = '/devops-exercises-zh/'
 
 export default defineConfig({
   lang: 'zh-CN',
@@ -39,7 +39,8 @@ export default defineConfig({
   },
 
   themeConfig: {
-    logo: `${base}images/devops.png`,
+    // 主题会给 logo 自动加上 base，所以这里不写 base
+    logo: '/images/devops.png',
     siteTitle: 'DevOps 题库',
 
     nav: [
