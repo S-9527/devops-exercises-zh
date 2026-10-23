@@ -1,0 +1,22 @@
+{
+  "geralt" : {
+    "id": "whitewolf",
+    "name": "Geralt of Rivia",
+    "description": "受雇四处旅行的怪物猎人"
+  },
+  "lara_croft" : {
+    "id": "m31a3n6sion",
+    "name": "Lara Croft",
+    "description": "聪明敏捷的英国考古学家"
+  },
+  "mario" : {
+    "id": "smb3igiul",
+    "name": "Mario",
+    "description": "非常喜欢蘑菇的意大利水管工"
+  },
+  "gordon_freeman" : {
+    "id": "nohalflife3",
+    "name": "Gordon Freeman",
+    "description": "枪法出色的物理学家"
+  }
+}

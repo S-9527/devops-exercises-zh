@@ -1,0 +1,18 @@
+<a name="great-day"></a>
+## 美好的一天
+
+<a name="objectives"></a>
+### 目标
+
+1. 编写一个脚本，打印“今天是美好的一天！”除非给它一个日期名称，然后它应该打印“今天是 <given day>"
+
+注意：无需检查给定参数是否实际上是有效日期
+
+<a name="solution"></a>
+### 解决方案
+
+```
+#!/usr/bin/env bash
+
+echo "Today is ${1:-a great day!}"
+```

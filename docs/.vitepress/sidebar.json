@@ -1,0 +1,387 @@
+[
+  {
+    "text": "开始",
+    "items": [
+      {
+        "text": "题库总览",
+        "link": "/guide/"
+      },
+      {
+        "text": "阅读说明",
+        "link": "/about"
+      }
+    ]
+  },
+  {
+    "text": "题库章节",
+    "collapsed": false,
+    "items": [
+      {
+        "text": "DevOps 应用领域",
+        "link": "/guide/devops-applications"
+      },
+      {
+        "text": "网络",
+        "link": "/guide/network"
+      },
+      {
+        "text": "操作系统",
+        "link": "/guide/operating-system"
+      },
+      {
+        "text": "虚拟化",
+        "link": "/guide/virtualization"
+      },
+      {
+        "text": "Prometheus",
+        "link": "/guide/prometheus"
+      },
+      {
+        "text": "Go",
+        "link": "/guide/go"
+      },
+      {
+        "text": "MongoDB",
+        "link": "/guide/mongo"
+      },
+      {
+        "text": "SQL",
+        "link": "/guide/sql"
+      },
+      {
+        "text": "OpenStack",
+        "link": "/guide/openstack"
+      },
+      {
+        "text": "Puppet",
+        "link": "/guide/puppet"
+      },
+      {
+        "text": "Elastic Stack",
+        "link": "/guide/elastic"
+      },
+      {
+        "text": "分布式系统",
+        "link": "/guide/distributed"
+      },
+      {
+        "text": "杂项",
+        "link": "/guide/misc"
+      },
+      {
+        "text": "Cassandra",
+        "link": "/guide/cassandra"
+      },
+      {
+        "text": "HTTP 与负载均衡",
+        "link": "/guide/http"
+      },
+      {
+        "text": "存储",
+        "link": "/guide/storage"
+      },
+      {
+        "text": "你可以问面试官的问题",
+        "link": "/guide/questions-you-can-ask"
+      },
+      {
+        "text": "测试",
+        "link": "/guide/testing"
+      },
+      {
+        "text": "正则表达式",
+        "link": "/guide/regex"
+      },
+      {
+        "text": "系统设计",
+        "link": "/guide/system-design"
+      },
+      {
+        "text": "硬件",
+        "link": "/guide/hardware"
+      },
+      {
+        "text": "大数据",
+        "link": "/guide/big-data"
+      },
+      {
+        "text": "Ceph",
+        "link": "/guide/ceph"
+      },
+      {
+        "text": "Packer",
+        "link": "/guide/packer"
+      },
+      {
+        "text": "发布",
+        "link": "/guide/release"
+      },
+      {
+        "text": "认证",
+        "link": "/guide/certificates"
+      },
+      {
+        "text": "更多 DevOps / SRE 项目",
+        "link": "/guide/additional-devops-and-sre-projects"
+      },
+      {
+        "text": "贡献者",
+        "link": "/guide/credits"
+      },
+      {
+        "text": "许可证",
+        "link": "/guide/license"
+      }
+    ]
+  },
+  {
+    "text": "专题练习",
+    "collapsed": true,
+    "items": [
+      {
+        "text": "DevOps",
+        "link": "/topics/devops/"
+      },
+      {
+        "text": "Linux",
+        "link": "/topics/linux/"
+      },
+      {
+        "text": "操作系统练习",
+        "link": "/topics/os/fork_101"
+      },
+      {
+        "text": "DNS",
+        "link": "/topics/dns/"
+      },
+      {
+        "text": "Git",
+        "link": "/topics/git/"
+      },
+      {
+        "text": "Shell 脚本",
+        "link": "/topics/shell/"
+      },
+      {
+        "text": "安全",
+        "link": "/topics/security/"
+      },
+      {
+        "text": "软技能与 HR",
+        "link": "/topics/soft_skills/"
+      },
+      {
+        "text": "Kubernetes",
+        "link": "/topics/kubernetes/"
+      },
+      {
+        "text": "容器与 Docker",
+        "link": "/topics/containers/"
+      },
+      {
+        "text": "OpenShift",
+        "link": "/topics/openshift/"
+      },
+      {
+        "text": "Argo CD",
+        "link": "/topics/argo/"
+      },
+      {
+        "text": "CI/CD",
+        "link": "/topics/cicd/"
+      },
+      {
+        "text": "CircleCI",
+        "link": "/topics/circleci/"
+      },
+      {
+        "text": "Zuul",
+        "link": "/topics/zuul/"
+      },
+      {
+        "text": "混沌工程",
+        "link": "/topics/chaos_engineering/"
+      },
+      {
+        "text": "Flask CI 实战（一）",
+        "link": "/topics/flask_container_ci/"
+      },
+      {
+        "text": "Flask CI 实战（二）",
+        "link": "/topics/flask_container_ci2/"
+      },
+      {
+        "text": "AWS",
+        "link": "/topics/aws/"
+      },
+      {
+        "text": "Azure",
+        "link": "/topics/azure/"
+      },
+      {
+        "text": "Google Cloud",
+        "link": "/topics/gcp/"
+      },
+      {
+        "text": "云平台基础",
+        "link": "/topics/cloud/"
+      },
+      {
+        "text": "Terraform",
+        "link": "/topics/terraform/"
+      },
+      {
+        "text": "Ansible",
+        "link": "/topics/ansible/"
+      },
+      {
+        "text": "可观测性",
+        "link": "/topics/observability/"
+      },
+      {
+        "text": "Grafana",
+        "link": "/topics/grafana/"
+      },
+      {
+        "text": "DataDog",
+        "link": "/topics/datadog/"
+      },
+      {
+        "text": "Kafka",
+        "link": "/topics/kafka/"
+      },
+      {
+        "text": "数据库",
+        "link": "/topics/databases/"
+      },
+      {
+        "text": "SQL 练习",
+        "link": "/topics/sql/improve_query"
+      },
+      {
+        "text": "Python 练习",
+        "link": "/topics/python/advanced_data_types"
+      },
+      {
+        "text": "编程练习",
+        "link": "/topics/programming/grep_berfore_and_after"
+      },
+      {
+        "text": "Node.js",
+        "link": "/topics/node/node_questions_basic"
+      },
+      {
+        "text": "Perl",
+        "link": "/topics/perl/"
+      },
+      {
+        "text": "软件开发",
+        "link": "/topics/software_development/"
+      },
+      {
+        "text": "SRE",
+        "link": "/topics/sre/"
+      },
+      {
+        "text": "杂项练习",
+        "link": "/topics/misc/elk_kibana_aws"
+      }
+    ]
+  },
+  {
+    "text": "动手场景",
+    "collapsed": true,
+    "items": [
+      {
+        "text": "云 Slack 机器人",
+        "link": "/topics/cloud_slack_bot"
+      },
+      {
+        "text": "ELK + Filebeat",
+        "link": "/topics/eflk"
+      },
+      {
+        "text": "Jenkins 管道",
+        "link": "/topics/jenkins_pipelines"
+      },
+      {
+        "text": "Jenkins 脚本",
+        "link": "/topics/jenkins_scripts"
+      },
+      {
+        "text": "构建和发布 Docker 图片至 Kubernetes 集群",
+        "link": "/topics/pipeline_deploy_image_to_k8"
+      }
+    ]
+  },
+  {
+    "text": "额外练习",
+    "collapsed": true,
+    "items": [
+      {
+        "text": "Docker 故障排查场景",
+        "link": "/exercises/docker/docker-debugging"
+      },
+      {
+        "text": "Shell 目录比较练习",
+        "link": "/exercises/shell/solutions/directories_comparison"
+      }
+    ]
+  },
+  {
+    "text": "面试与认证",
+    "collapsed": true,
+    "items": [
+      {
+        "text": "如何准备面试",
+        "link": "/prepare_for_interview"
+      },
+      {
+        "text": "常见问题 FAQ",
+        "link": "/faq"
+      },
+      {
+        "text": "认证备考",
+        "collapsed": true,
+        "items": [
+          {
+            "text": "AWS 认证路径",
+            "link": "/certificates/aws-certification-paths"
+          },
+          {
+            "text": "AWS - 云 Practitioner",
+            "link": "/certificates/aws-cloud-practitioner"
+          },
+          {
+            "text": "AWS 云系统运营管理助理",
+            "link": "/certificates/aws-cloud-sysops-associate"
+          },
+          {
+            "text": "AWS - 解决方案 Architect Associate",
+            "link": "/certificates/aws-solutions-architect-associate"
+          },
+          {
+            "text": "AZ-900",
+            "link": "/certificates/azure-fundamentals-az-900"
+          },
+          {
+            "text": "已认证 Kubernetes 管理员（CKA)",
+            "link": "/certificates/cka"
+          },
+          {
+            "text": "已认证 Kubernetes 应用程序开发人员（CKAD)",
+            "link": "/certificates/ckad"
+          }
+        ]
+      },
+      {
+        "text": "贡献指南",
+        "link": "/CONTRIBUTING"
+      },
+      {
+        "text": "贡献者",
+        "link": "/credits"
+      }
+    ]
+  }
+]

@@ -1,0 +1,14 @@
+node_modules/
+.pnpm-store/
+
+# 构建产物
+docs/.vitepress/dist/
+docs/.vitepress/cache/
+
+# docs/ 下的 markdown 与静态资源都由 scripts/generate.mjs 生成，
+# 只需要保留 .vitepress（配置 + 主题 + 生成的 sidebar.json）
+/docs/*
+!/docs/.vitepress
+
+.DS_Store
+*.log

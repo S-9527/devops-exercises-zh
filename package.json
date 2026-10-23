@@ -1,0 +1,20 @@
+{
+  "name": "devops-exercises-zh",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "devops-exercises 中文版的 VitePress 站点",
+  "scripts": {
+    "content": "node scripts/generate.mjs",
+    "check": "node scripts/generate.mjs && node scripts/check.mjs",
+    "dev": "node scripts/generate.mjs && vitepress dev docs",
+    "build": "node scripts/generate.mjs && node scripts/check.mjs && vitepress build docs",
+    "preview": "vitepress preview docs"
+  },
+  "devDependencies": {
+    "pagefind": "^1.5.2",
+    "vitepress": "^1.6.4",
+    "vitepress-plugin-pagefind": "^0.4.25",
+    "vue": "^3.5.13"
+  }
+}

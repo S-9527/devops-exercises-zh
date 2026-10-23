@@ -1,0 +1,287 @@
+/* ------------------------------------------------------------------ */
+/* 基础排版                                                            */
+/* ------------------------------------------------------------------ */
+
+:root {
+  --vp-font-family-base: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI',
+    'PingFang SC', 'Hiragino Sans GB', 'Microsoft YaHei', 'Noto Sans SC', sans-serif;
+  --vp-font-family-mono: 'JetBrains Mono', 'Fira Code', ui-monospace, SFMono-Regular,
+    Menlo, Consolas, monospace;
+  --vp-layout-max-width: 1480px;
+  --qa-radius: 10px;
+}
+
+.vp-doc {
+  font-size: 16px;
+  line-height: 1.78;
+}
+
+.vp-doc p,
+.vp-doc li {
+  line-height: 1.8;
+}
+
+.vp-doc h1 {
+  letter-spacing: -0.02em;
+}
+
+.vp-doc h2 {
+  margin-top: 44px;
+  padding-top: 22px;
+  border-top: 1px solid var(--vp-c-divider);
+}
+
+.vp-doc h3 {
+  margin-top: 32px;
+}
+
+.vp-doc a {
+  text-underline-offset: 3px;
+}
+
+.vp-doc [id] {
+  scroll-margin-top: 84px;
+}
+
+/* 表格更好读一点 */
+.vp-doc table {
+  display: block;
+  overflow-x: auto;
+  border-collapse: collapse;
+}
+
+.vp-doc th,
+.vp-doc td {
+  padding: 8px 12px;
+  border: 1px solid var(--vp-c-divider);
+}
+
+.vp-doc tr:nth-child(2n) {
+  background: var(--vp-c-bg-soft);
+}
+
+/* ------------------------------------------------------------------ */
+/* 问答卡片                                                            */
+/* ------------------------------------------------------------------ */
+
+.vp-doc details {
+  margin: 10px 0;
+  padding: 0 16px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--qa-radius);
+  background: var(--vp-c-bg-soft);
+  transition: border-color 0.2s ease, background-color 0.2s ease;
+}
+
+.vp-doc details:hover {
+  border-color: var(--vp-c-brand-2);
+}
+
+.vp-doc details[open] {
+  padding-bottom: 10px;
+  border-color: var(--vp-c-brand-1);
+  background: var(--vp-c-bg);
+}
+
+.vp-doc details summary {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  margin: 0;
+  padding: 13px 0;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+  cursor: pointer;
+  list-style: none;
+}
+
+.vp-doc details summary::-webkit-details-marker {
+  display: none;
+}
+
+/* 问题前的 Q 徽标 */
+.vp-doc details summary::before {
+  content: 'Q';
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 20px;
+  height: 20px;
+  margin-top: 2px;
+  border-radius: 6px;
+  background: var(--vp-c-brand-soft);
+  color: var(--vp-c-brand-1);
+  font-size: 11px;
+  font-weight: 700;
+  line-height: 1;
+}
+
+/* 右侧箭头 */
+.vp-doc details summary::after {
+  content: '';
+  flex: none;
+  width: 7px;
+  height: 7px;
+  margin-top: 9px;
+  margin-left: auto;
+  border-right: 1.6px solid currentColor;
+  border-bottom: 1.6px solid currentColor;
+  opacity: 0.55;
+  transform: rotate(45deg);
+  transition: transform 0.2s ease;
+}
+
+.vp-doc details[open] summary::after {
+  margin-top: 11px;
+  transform: rotate(-135deg);
+}
+
+/* 答案内容：原文件把答案包在 <b> 里，这里恢复常规字重 */
+.vp-doc details > b {
+  font-weight: 400;
+}
+
+.vp-doc details > *:not(summary):not(br) {
+  margin-left: 30px;
+}
+
+.vp-doc details > b:first-of-type,
+.vp-doc details > p:first-of-type {
+  margin-top: 0;
+}
+
+.vp-doc details p {
+  margin: 8px 0;
+}
+
+.vp-doc details pre {
+  margin: 12px 0;
+}
+
+/* ------------------------------------------------------------------ */
+/* 全部展开 / 收起                                                     */
+/* ------------------------------------------------------------------ */
+
+.qa-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  margin: 18px 0 24px;
+  padding: 9px 14px;
+  border: 1px dashed var(--vp-c-divider);
+  border-radius: var(--qa-radius);
+  background: var(--vp-c-bg-soft);
+  font-size: 13px;
+}
+
+.qa-toolbar__count {
+  margin-right: auto;
+  color: var(--vp-c-text-2);
+}
+
+.qa-toolbar button {
+  padding: 4px 11px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: 8px;
+  background: var(--vp-c-bg);
+  color: var(--vp-c-text-1);
+  font-size: 12px;
+  line-height: 1.6;
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+
+.qa-toolbar button:hover {
+  border-color: var(--vp-c-brand-1);
+  color: var(--vp-c-brand-1);
+}
+
+/* ------------------------------------------------------------------ */
+/* 首页                                                                */
+/* ------------------------------------------------------------------ */
+
+:root {
+  --vp-home-hero-name-color: transparent;
+  --vp-home-hero-name-background: linear-gradient(120deg, #3451b2 30%, #2ea87a);
+  --vp-home-hero-image-background-image: linear-gradient(
+    -45deg,
+    rgba(52, 81, 178, 0.35) 40%,
+    rgba(46, 168, 122, 0.35)
+  );
+  --vp-home-hero-image-filter: blur(56px);
+}
+
+.topic-group-title {
+  margin: 30px 0 12px;
+  padding: 0;
+  border-top: none;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+  color: var(--vp-c-text-2);
+}
+
+.topic-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
+  gap: 10px;
+  margin-bottom: 8px;
+}
+
+.topic-card {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  padding: 13px 15px;
+  border: 1px solid var(--vp-c-divider);
+  border-radius: var(--qa-radius);
+  background: var(--vp-c-bg-soft);
+  text-decoration: none !important;
+  transition: border-color 0.2s ease, transform 0.2s ease, background-color 0.2s ease;
+}
+
+.topic-card:hover {
+  border-color: var(--vp-c-brand-1);
+  background: var(--vp-c-bg);
+  transform: translateY(-1px);
+}
+
+.topic-card__name {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--vp-c-text-1);
+}
+
+.topic-card__meta {
+  font-size: 12px;
+  color: var(--vp-c-text-3);
+}
+
+.guide-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px 16px;
+  line-height: 2.1;
+}
+
+/* 首页正文字号略小，避免卡片过大 */
+.VPHome .vp-doc h2 {
+  margin-top: 40px;
+  border-top: none;
+  padding-top: 0;
+}
+
+@media (max-width: 640px) {
+  .topic-grid {
+    grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+  }
+
+  .qa-toolbar {
+    flex-wrap: wrap;
+  }
+
+  .vp-doc details > *:not(summary):not(br) {
+    margin-left: 0;
+  }
+}
