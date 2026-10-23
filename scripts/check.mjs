@@ -28,6 +28,10 @@ function stripFrontmatter(text) {
   return text.replace(/^---\n[\s\S]*?\n---\n/, '')
 }
 
+// base 从站点配置里读（和 generate.mjs 一致），用来检查有没有重复加前缀
+const BASE = (fs.readFileSync(path.join(DOCS, '.vitepress/config.mts'), 'utf8').match(/const base = '([^']*)'/) || [, '/'])[1]
+const DOUBLE_BASE = BASE === '/' ? null : `${BASE}${BASE.slice(1)}`
+
 const files = []
 ;(function walk(dir) {
   for (const e of fs.readdirSync(dir, { withFileTypes: true })) {
@@ -51,6 +55,13 @@ for (const abs of files) {
     continue
   }
   const errors = []
+  // 子路径部署最容易踩的坑：base 被加了两次 → /repo/repo/images/x.png
+  if (DOUBLE_BASE) {
+    const dup = [...raw.matchAll(new RegExp(`(?:href|src)=["'][^"']*${DOUBLE_BASE.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')}`, 'g'))]
+    if (dup.length) {
+      errors.push(`发现重复的 base 前缀 ×${dup.length}，例：${dup[0][0].slice(0, 100)}`)
+    }
+  }
   compile(html, {
     onError(e) {
       errors.push(`${e.message} @${e.loc ? `${e.loc.start.line}:${e.loc.start.column}` : '?'}`)

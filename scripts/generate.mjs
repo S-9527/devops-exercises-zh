@@ -14,6 +14,10 @@ const posix = path.posix
 /** 站点 base，直接从 docs/.vitepress/config.mts 里读，避免两处不一致 */
 const BASE = (fs.readFileSync(path.join(VP_DIR, 'config.mts'), 'utf8').match(/const base = '([^']*)'/) || [, '/'])[1]
 
+function escapeRegExp(text) {
+  return text.replace(/[.*+?^${}()|[\]\\]/g, '\\$&')
+}
+
 /** 和 docs/.vitepress/config.mts 里的 markdown 配置保持一致 */
 const md = await createMarkdownRenderer(
   DOCS,
@@ -950,9 +954,13 @@ function addTableBody(content) {
  * VitePress 只会给 markdown 语法写的链接套 base（`[x](/foo)`、配置里的 sidebar 等），
  * 正文里手写的 `<a href="/foo">`、`<img src="/foo.png">` 会原样输出，
  * 部署到 https://<user>.github.io/<repo>/ 这类子路径时就会 404。
+ *
+ * 这个函数是幂等的：已经带 base 的路径不会再加一次（有几处内容会被处理两遍）。
  */
 function applyBase(content) {
   if (BASE === '/') return content
+  // href="/xxx"：后面既不是 "/"（协议相对）也不是已经写好 base 的情况
+  const baseRe = new RegExp(`(href|src)=(["'])\\/(?!\\/|${escapeRegExp(BASE.slice(1))})`, 'g')
   const out = []
   let fence = false
   for (const line of content.split('\n')) {
@@ -967,9 +975,7 @@ function applyBase(content) {
     }
     out.push(
       splitInlineCode(line)
-        .map((part) =>
-          part.code ? part.text : part.text.replace(/(href|src)=(["'])\/(?!\/)/g, (m, attr, quote) => `${attr}=${quote}${BASE}`),
-        )
+        .map((part) => (part.code ? part.text : part.text.replace(baseRe, (m, attr, quote) => `${attr}=${quote}${BASE}`)))
         .join(''),
     )
   }
