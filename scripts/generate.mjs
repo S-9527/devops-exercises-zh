@@ -420,6 +420,18 @@ for (const rel of mdFiles) {
   addPage({ relOut, baseDir, content, title, source: rel, topic })
 }
 
+// LICENSE 没有 .md 后缀，之前会被跳过，导致「阅读说明」里的 /license 是 404
+if (fileSet.has('LICENSE')) {
+  const licenseText = stripBom(fs.readFileSync(path.join(SRC, 'LICENSE'), 'utf8')).trim()
+  addPage({
+    relOut: 'license.md',
+    baseDir: '',
+    content: `# 许可证\n\n本站内容遵循上游的 **CC BY-NC-ND 3.0** 许可，完整条款如下（英文原文）：\n\n${licenseText}`,
+    title: '许可证',
+    source: 'LICENSE',
+  })
+}
+
 /* ------------------------------------------------------------------ */
 /* 统计与文案数字                                                      */
 /* ------------------------------------------------------------------ */
@@ -440,6 +452,17 @@ function encodePath(p) {
   return encodeURI(p)
 }
 
+/** 按仓库里的真实文件，把一个仓库相对路径（可带 .md）转成站点路由 */
+function routeForRepoPath(repoPath) {
+  if (/\/README\.md$/i.test(repoPath) || repoPath === 'README.md') {
+    const dir = repoPath.replace(/\/?README\.md$/i, '')
+    return dir ? `/${dir}/` : '/'
+  }
+  if (repoPath === 'LICENSE' || repoPath === 'LICENSE.md') return '/license'
+  if (/\.md$/i.test(repoPath)) return `/${repoPath.slice(0, -3)}`
+  return `/${encodePath(repoPath)}`
+}
+
 function resolveTarget(rawTarget, baseDir) {
   let target = rawTarget.trim()
   if (!target) return null
@@ -458,7 +481,8 @@ function resolveTarget(rawTarget, baseDir) {
     p = filePart
   }
 
-  if (p.startsWith('/')) p = p.slice(1)
+  const asWritten = p.startsWith('/')
+  if (asWritten) p = p.slice(1)
   else p = posix.normalize(posix.join(baseDir, p))
   if (p.startsWith('..')) return null
   p = p.replace(/^\.\//, '').replace(/\/+$/, '')
@@ -466,27 +490,54 @@ function resolveTarget(rawTarget, baseDir) {
 
   if (EXTERNAL_MAP[p]) return EXTERNAL_MAP[p] + hash
 
-  if (/\.md$/i.test(p)) {
-    if (/\/README\.md$/i.test(p) || p === 'README.md') {
-      const dir = p.replace(/\/?README\.md$/i, '')
-      return (dir ? `/${dir}/` : '/') + hash
-    }
-    if (p === 'LICENSE' || p === 'LICENSE.md') return '/license' + hash
-    return `/${p.slice(0, -3)}` + hash
+  // 上游偶尔漏写协议（`[Gremlin](gremlin.com)`），这种情况当外链处理
+  const bareDomain = filePart.replace(/^\.?\//, '')
+  if (/^[\w-]+(\.[\w-]+)+(\/\S*)?$/.test(bareDomain) && !fileSet.has(bareDomain) && !dirSet.has(bareDomain)) {
+    return `https://${bareDomain}` + hash
   }
 
-  if (dirSet.has(p)) return `/${p}/` + hash
-  if (fileSet.has(p)) return `/${encodePath(p)}` + hash
-
-  // 上游有些图片是按仓库根目录写的（例如 topics/git/README.md 里的 images/…），
-  // 相对本文件找不到时，再按根目录试一次
+  // 候选路径：先按相对本文件解析，再按仓库根目录解析（上游两种写法都有）
+  const candidates = [p]
   const fromRoot = posix.normalize(filePart.replace(/^\.?\//, ''))
-  if (fromRoot !== p && (fileSet.has(fromRoot) || dirSet.has(fromRoot))) {
-    return `/${encodePath(fromRoot)}` + hash
+  if (!asWritten && fromRoot && fromRoot !== p && !fromRoot.startsWith('..')) candidates.push(fromRoot)
+
+  // 1) 目录
+  for (const c of candidates) {
+    if (!/\.md$/i.test(c) && dirSet.has(c)) return `/${c}/` + hash
   }
 
-  // 目标确实不存在（例如 upstream 缺少的 scenarios/），仍返回根路径，避免相对路径错位
-  return `/${encodePath(p)}` + hash
+  // 2) 文件
+  for (const c of candidates) {
+    if (fileSet.has(c)) return routeForRepoPath(c) + hash
+  }
+
+  // 3) 链接写的是目录形式（xxx.md 或 xxx/），但那里只有 exercise.md / solution.md 之类的页面
+  const noExt = p.replace(/\.md$/i, '')
+  for (const name of ['exercise', 'index', 'README', 'solution']) {
+    for (const ext of ['.md', '']) {
+      const probe = `${noExt}/${name}${ext}`
+      if (fileSet.has(probe)) return routeForRepoPath(probe) + hash
+    }
+  }
+
+  // 4) 同名文件（上游表格里经常写错目录，比如指向 topics/containers/ 下其实在 topics/devops/）
+  const stem = posix.basename(noExt)
+  const fileStem = (f) => f.replace(/\.md$/i, '')
+  let sameStem = allFiles.filter((f) => fileStem(f) === stem || fileStem(f).endsWith(`/${stem}`))
+  if (sameStem.length > 1) {
+    // 优先同名的父目录，其次排除 solutions/ 里的答案页
+    const parent = posix.basename(posix.dirname(noExt))
+    const byParent = sameStem.filter((f) => posix.basename(posix.dirname(f)) === parent)
+    if (byParent.length === 1) sameStem = byParent
+    else if (!noExt.includes('solutions')) {
+      const noSolutions = sameStem.filter((f) => !f.includes('/solutions/'))
+      if (noSolutions.length === 1) sameStem = noSolutions
+    }
+  }
+  if (sameStem.length === 1) return routeForRepoPath(sameStem[0]) + hash
+
+  // 5) 目标确实不存在（例如 upstream 少了的文件），仍返回根路径，避免相对路径错位
+  return `/${encodePath(noExt)}` + hash
 }
 
 const MD_LINK_RE = /(!?\[[^\]]*\]\()([^)]+)(\))/g
