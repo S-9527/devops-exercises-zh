@@ -9,6 +9,8 @@
 - 内置 Pagefind 离线搜索（中文分词）
 - 全静态输出，可直接丢到 GitHub Pages / Netlify / 任意静态托管
 
+在线地址：<https://s-9527.github.io/devops-exercises-zh/>
+
 ## 快速开始
 
 ```bash
@@ -16,7 +18,7 @@ pnpm install
 
 pnpm dev      # 生成页面 + 本地预览 http://localhost:5173
 pnpm build    # 自检 + 构建到 docs/.vitepress/dist
-pnpm preview  # 预览构建结果
+pnpm preview  # 预览构建结果（带 base 时是 http://localhost:4173/devops-exercises-zh/）
 ```
 
 其它命令：
@@ -68,10 +70,16 @@ VitePress 的构建是「遇到第一个错误就停」，几百个页面挨个�
 
 ## 部署
 
-默认 `base = '/'`。如果部署在子路径（例如 `https://<user>.github.io/devops-zh-site/`），
-把 `docs/.vitepress/config.mts` 里的 `base` 改成 `'/devops-zh-site/'` 再构建即可。
+已经接好 GitHub Pages：推到 `main` 后 `.github/workflows/deploy.yml` 会自动
+`pnpm install && pnpm build`，把 `docs/.vitepress/dist` 发到
+<https://s-9527.github.io/devops-exercises-zh/>。
 
-构建产物在 `docs/.vitepress/dist`。
+因为是**项目站点**，`docs/.vitepress/config.mts` 里的 `base` 设成了 `'/devops-exercises-zh/'`。
+注意 VitePress 只会给 markdown 语法的链接套 base，正文里手写的 `<a href="/x">`、`<img src="/x">`
+不会，所以 `scripts/generate.mjs` 里的 `applyBase()` 会负责补上——如果你把站部署到别的路径
+（换仓库名 / 自定义域名 / 根路径），改 `config.mts` 里的 `base` 就行，生成器会自动读它。
+
+构建产物在 `docs/.vitepress/dist`，`pnpm preview` 可以在本地按真实子路径预览。
 
 ## 说明与许可
 
