@@ -463,6 +463,9 @@ function routeForRepoPath(repoPath) {
   return `/${encodePath(repoPath)}`
 }
 
+/** 仓库里确实找不到的目标（上游中文译本缺文件），链接会退化成纯文字 */
+const missingTargets = new Set()
+
 function resolveTarget(rawTarget, baseDir) {
   let target = rawTarget.trim()
   if (!target) return null
@@ -537,7 +540,9 @@ function resolveTarget(rawTarget, baseDir) {
   if (sameStem.length === 1) return routeForRepoPath(sameStem[0]) + hash
 
   // 5) 目标确实不存在（例如 upstream 少了的文件），仍返回根路径，避免相对路径错位
-  return `/${encodePath(noExt)}` + hash
+  const fallback = `/${encodePath(noExt)}` + hash
+  missingTargets.add(fallback)
+  return fallback
 }
 
 const MD_LINK_RE = /(!?\[[^\]]*\]\()([^)]+)(\))/g
@@ -551,7 +556,10 @@ function rewriteLineLinks(line, baseDir) {
 
       text = text.replace(MD_LINK_RE, (match, open, target, close) => {
         const resolved = resolveTarget(target, baseDir)
-        return resolved ? `${open}${resolved}${close}` : match
+        if (!resolved) return match
+        // 上游中文译本里没有这个文件：保留文字、去掉链接，避免读者点出 404
+        if (missingTargets.has(resolved) && !open.startsWith('![')) return open.slice(1, -2)
+        return `${open}${resolved}${close}`
       })
 
       text = text.replace(HTML_ATTR_RE, (match, attr, quote, value) => {
